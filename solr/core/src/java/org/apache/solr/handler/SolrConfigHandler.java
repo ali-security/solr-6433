@@ -148,8 +148,10 @@ public class SolrConfigHandler extends RequestHandlerBase
       } finally {
         RequestHandlerUtils.addExperimentalFormatWarning(rsp);
       }
-    } else {
+    } else if ("GET".equals(httpMethod)) {
       command.handleGET();
+    } else {
+      throw SchemaHandler.getUnexpectedHttpMethodException(httpMethod);    
     }
   }
 
@@ -956,7 +958,7 @@ public class SolrConfigHandler extends RequestHandlerBase
       case "POST":
         return Name.CONFIG_EDIT_PERM;
       default:
-        return null;
+        throw SchemaHandler.getUnexpectedHttpMethodException(ctx.getHttpMethod());
     }
   }
 
